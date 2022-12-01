@@ -20,7 +20,7 @@ export default class CharList extends Component{
         this.setState({chars: res.data})
     }
     deleteChar = async(id) => {
-        await axios.delete('https://dndbackapi.onrender.com/chars' + id);
+        await axios.delete('https://dndbackapi.onrender.com/chars/' + id);
         this.getChars();
     }
 

@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { useParams } from "react-router-dom";
+import { toHaveFocus } from '@testing-library/jest-dom/dist/matchers';
 
-const randomQuote = require('random-lotr-movie-quote');
+//const randomQuote = require('random-lotr-movie-quote');
+//console.log(randomQuote().dialog);
+//verfinal
 
-console.log(randomQuote().dialog);
+
 
 function withParams(Component) {
     return props => <Component {...props} params={useParams()} />;
@@ -24,7 +27,7 @@ class CreateChar extends Component {
         nombre: "",
         clase: "Guerrero",
         raza: "Humano",
-        frase: randomQuote().dialog,
+        frase: "",
         
 
         fuerza: Math.floor(Math.random() * (18 - 1 + 1) + 1),
@@ -49,16 +52,29 @@ class CreateChar extends Component {
 
 
     async componentDidMount(){
-        const res = await axios.get('https://dndbackapi.onrender.com/chars')
-        document.title = "Crear personaje";
-        this.setState({
-        
-          
 
+        const res = await axios.get('https://dndbackapi.onrender.com/chars/')
+        document.title = "Crear personaje";
+        
+        const headers = {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer o8NRU9N9v8VAcMaY32og'
+        }
+        axios.get("https://the-one-api.dev/v2/quote", {headers: headers})
+        .then(res =>{
+            const quotes = res.data
+            const quote =  quotes.docs[Math.floor(Math.random() * quotes.docs.length)];
+            const realquote = quote.dialog;
+            this.setState({realquote});
+            console.log(realquote)
+        })
+       
+
+        this.setState({
         })
 
         if(this.props.params.id){
-            const res = await axios.get('https://dndbackapi.onrender.com/chars' + this.props.params.id);
+            const res = await axios.get('https://dndbackapi.onrender.com/chars/' + this.props.params.id);
             this.setState({
                _id: this.props.params.id,
 
@@ -92,7 +108,7 @@ class CreateChar extends Component {
             nombre: this.state.nombre,
             clase: this.state.clase,
             raza: this.state.raza,
-            frase: this.state.frase,
+            frase: this.state.realquote,
 
             fuerza: this.state.fuerza,
             destreza: this.state.destreza,
@@ -220,7 +236,7 @@ class CreateChar extends Component {
                             className=""  
                             name="frase"
                             onChange={this.onInputChange}
-                            value={this.state.frase}
+                            value={this.state.realquote}
                             id="frasearea"
                             required/>
                             </div>
@@ -248,7 +264,7 @@ class CreateChar extends Component {
                             inteligencia: Math.floor(Math.random() * (18 - 1 + 1) + 1),
                             sabiduria: Math.floor(Math.random() * (18 - 1 + 1) + 1),
                             carisma: Math.floor(Math.random() * (18 - 1 + 1) + 1),
-                            frase: randomQuote().dialog
+                            frase: this.componentDidMount()
                            
                             })}>
                             No me gusta mi destino! 
