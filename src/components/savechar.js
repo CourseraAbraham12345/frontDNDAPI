@@ -119,9 +119,9 @@ class CreateChar extends Component {
 
         }
         if(this.state.editing){
-            await axios.put('https://dndbackapi.onrender.com/chars' + this.state._id, newChar)
+            await axios.put('https://dndbackapi.onrender.com/chars/' + this.state._id, newChar)
         }else{
-            await axios.post('https://dndbackapi.onrender.com/chars', newChar);
+            await axios.post('https://dndbackapi.onrender.com/chars/', newChar);
         }
 
         window.location.href = '/';
